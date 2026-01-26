@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Listing</title>
+</head>
+<body>
+    <h2>Edit this listing</h2>
+    <h2>Edit the Listing</h2>
+    <form method="post" action="/listing/<%= listingID._id %>?_method=PUT">
+        <input type="text" name="listing[title]" placeholder="Enter the title" value="<%= listingID.title %>">
+        <br>
+        <textarea name="listing[description]" id="" placeholder="write about your hotel" value="<%= listingID.description %>"></textarea>
+        <br>
+        <input type="text" name="listing[image]" placeholder="Enter image (URL)" value="<%= listingID.image %>">
+        <br>
+        <input type="text" name="listing[price]" placeholder="Enter the price" value="<%= listingID.price %>">
+        <br>
+        <input type="text" name="listing[locat]ion" placeholder="Enter the location" value="<%= listingID.location %>">
+        <br>
+        <input type="text" name="listing[country]" placeholder="Enter the country" value="<%= listingID.country %>">
+        <br>
+        <button>EDIT</button>
+    </form>
+</body>
+</html>

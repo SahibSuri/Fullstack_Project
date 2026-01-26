@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listings</title>
+</head>
+<body>
+
+<h1>All Listings</h1>
+<form action="/listing/new" method="get">
+    <button>Create New Listing</button>
+</form>
+<% alllistings.forEach(listing => { %>
+    <p><%= listing.title %></p>
+    <a href="/listing/<%= listing._id %>">Show</a>
+    <% }) %>
+
+</body>
+</html>
