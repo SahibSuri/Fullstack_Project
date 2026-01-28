@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Listing</title>
-</head>
+<% layout('layouts/boilerplate') %>
 <body>
-    <h2>Edit this listing</h2>
-    <h2>Edit the Listing</h2>
+    
     <form method="post" action="/listing/<%= listingID._id %>?_method=PUT">
         <input type="text" name="listing[title]" placeholder="Enter the title" value="<%= listingID.title %>">
         <br>
@@ -24,4 +17,3 @@
         <button>EDIT</button>
     </form>
 </body>
-</html>

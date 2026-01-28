@@ -1,0 +1,94 @@
+h2{
+    text-align: center;
+}
+.custom-navbar {
+    background-color: #8b8e90bb !important; /* Specific light grey */
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0.8rem 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .navbar-brand {
+    font-weight: 700;
+    color: #333 !important;
+    letter-spacing: 1px;
+  }
+
+  .nav-link {
+    font-weight: 500;
+    color: #555 !important;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+
+  /* Animated underline effect on hover */
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    display: block;
+    margin-top: 2px;
+    right: 0;
+    background: #007bff; /* Primary blue accent */
+    transition: width 0.3s ease;
+    -webkit-transition: width 0.3s ease;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+    left: 0;
+    background: #007bff;
+  }
+
+  .nav-link:hover {
+    color: #007bff !important;
+  }
+  
+.custom-footer {
+    background-color: #f8f9fa !important; /* Matching your navbar light grey */
+    border-top: 1px solid #e0e0e0;
+    padding: 3rem 0 1.5rem 0;
+    color: #555;
+    font-family: inherit;
+  }
+
+  .footer-brand {
+    font-weight: 700;
+    color: #333 !important;
+    letter-spacing: 1px;
+    text-decoration: none;
+    font-size: 1.25rem;
+  }
+
+  .footer-info-socials a {
+    color: #555;
+    font-size: 1.5rem;
+    margin-right: 15px;
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+  }
+
+  .footer-info-socials a:hover {
+    color: #007bff; /* Matching your navbar blue accent */
+    transform: translateY(-3px);
+  }
+
+  .footer-info-links a {
+    color: #6c757d;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .footer-info-links a:hover {
+    color: #007bff;
+  }
+
+  .copyright-text {
+    font-size: 0.85rem;
+    color: #888;
+  }

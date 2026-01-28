@@ -6,6 +6,7 @@ const PORT = 8001
 const listing = require('./models/listing')
 const path = require('path')
 const methodOverride = require('method-override')
+const ejsMate = require('ejs-mate')
 
 
 main()
@@ -21,13 +22,15 @@ app.set('view engine' , 'ejs')
 app.set("views" , path.join(__dirname , "views"))
 app.use(express.urlencoded({extended: true}))
 app.use(methodOverride("_method"))
+app.engine('ejs' , ejsMate)
+app.use(express.static(path.join(__dirname , "public")))
 
 async function main(){
     await mongoose.connect(MONGO_URL)
 }
 
 app.get('/' , (req,res)=>{
-    res.send("Hello from the server backend")
+    res.render("listings/home.ejs")
 })
 
 // INDEX route
@@ -82,3 +85,5 @@ app.delete('/listing/:id' , async (req , res)=>{
     console.log(DeletedListing)
     res.redirect('/listing')
 })
+
+// 
