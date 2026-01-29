@@ -1,23 +1,29 @@
 <% layout('layouts/boilerplate') %>
 
-<body>
-<% alllistings.forEach(listing => { %>
-
-    <div class="card" style="width: 18rem;">
-  <img src="<%= listing.image %>" class="card-img-top" alt="listing_image">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+<div class="container mt-4">
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+    <% alllistings.forEach(listing => { %>
+      <div class="col">
+        <a href="/listing/<%= listing.id %>" class="listing-link">
+          <div class="card h-100 listing-card border-0">
+            <img 
+              src="<%= listing.image.url %>" 
+              class="card-img-top" 
+              alt="listing_image" 
+              style="height: 20rem; object-fit: cover;"
+            >
+            <div class="card-body px-0">
+              <h5 class="card-title"><b><%= listing.title %></b></h5>
+              <p class="card-text text-muted">
+                <%= listing.description.substring(0, 100) %>...
+              </p>
+              <div class="d-grid">
+                 <span class="btn btn-outline-dark btn-sm">View Details</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% }) %>
   </div>
 </div>
-    <% }) %>
-
-
-<!-- <% alllistings.forEach(listing => { %>
-    <p><%= listing.title %></p>
-    <a href="/listing/<%= listing._id %>">Show</a>
-    <% }) %> -->
-
-</body>
-

@@ -1,94 +1,561 @@
 h2{
     text-align: center;
 }
-.custom-navbar {
-    background-color: #8b8e90bb !important; /* Specific light grey */
-    border-bottom: 1px solid #e0e0e0;
-    padding: 0.8rem 1rem;
+
+  /* Remove default link styling from cards */
+.listing-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Card Hover Effects */
+.listing-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.listing-card:hover {
+    transform: translateY(-5px);
+}
+
+.listing-card img {
+    border-radius: 1rem !important; /* Rounded corners for a modern look */
+    transition: opacity 0.2s;
+}
+
+.listing-card:hover img {
+    opacity: 0.9;
+}
+
+/* Typography tweaks */
+.card-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.card-text {
+    font-weight: 400;
+}
+
+/* Button Hover Effect */
+.btn-light:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
     transition: all 0.3s ease;
-  }
+}
 
-  .navbar-brand {
+/* Dark Theme Variables */
+:root {
+    --bg-dark: #0f0f0f;
+    --card-grey: #1a1a1a;
+    --accent-white: #ffffff;
+    --soft-grey: #a0a0a0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--accent-white);
+}
+
+/* Glassmorphism Detail Card */
+.glass-card {
+    background: rgb(56, 54, 54);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+}
+
+/* Image Hover Effect */
+.show-card-img {
+    overflow: hidden;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.show-card-img img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.show-card-img:hover img {
+    transform: scale(1.03);
+}
+
+/* Custom Buttons */
+.btn-dark-danger {
+    background: transparent;
+    border: 1px solid #d4d4d4;
+    color: #e2e2e2;
+    transition: 0.3s;
+}
+
+.btn-dark-danger:hover {
+    background: #b8b8b8;
+    color: white;
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+}
+
+.btn-outline-light:hover {
+    background: white;
+    color: black;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Keyframe Animations */
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+}
+
+.animate-slide-up-delayed {
+    animation: slideUp 0.8s ease-out 0.2s forwards;
+    opacity: 0; /* Starts hidden for the delay */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.listing-description {
+    line-height: 1.8;
+    letter-spacing: 0.3px;
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+
+/* For new.ejs */
+/* 1. Animated Mesh Gradient Background */
+.new-listing-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(45deg, #0f0f0f, #1a1a1a, #2c3e50, #000000);
+    background-size: 400% 400%;
+    animation: meshGradient 15s ease infinite;
+    overflow-x: hidden;
+}
+
+@keyframes meshGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 2. Glassmorphism Container */
+.glass-form-container {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* 3. Fluid Typography with clamp() */
+.form-title {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -1px;
+}
+
+.form-subtitle {
+    color: #a0a0a0;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+}
+
+/* 4. Neumorphic Input Fields */
+.input-group-custom {
+    margin-bottom: 1.5rem;
+}
+
+.input-group-custom label {
+    display: block;
+    color: #eee;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    padding-left: 0.5rem;
+}
+
+.input-group-custom input, 
+.input-group-custom textarea {
+    width: 100%;
+    padding: 12px 20px;
+    background: #1a1a1a;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    /* Neumorphic Inner Shadow */
+    box-shadow: inset 4px 4px 8px #0a0a0a, 
+                inset -2px -2px 6px rgba(255,255,255,0.05);
+    transition: all 0.3s ease;
+}
+
+.input-group-custom input:focus, 
+.input-group-custom textarea:focus {
+    outline: none;
+    box-shadow: inset 2px 2px 4px #000, 
+                0 0 8px rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+}
+
+/* 5. Neumorphic & Animated Button */
+.btn-neumorphic {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #000;
     font-weight: 700;
-    color: #333 !important;
+    text-transform: uppercase;
     letter-spacing: 1px;
-  }
+    box-shadow: 4px 4px 15px rgba(0,0,0,0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
 
-  .nav-link {
+.btn-neumorphic:hover {
+    transform: scale(1.02);
+    background: #e0e0e0;
+    box-shadow: 0 0 25px rgba(255,255,255,0.2);
+}
+
+.btn-neumorphic:active {
+    transform: scale(0.98);
+}
+
+/* Smooth Transitions & Animations */
+.animate-fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Smooth Scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+
+
+/* For Home Page */
+/* Full Page Immersion */
+.home-wrapper {
+    background: #0f0f0f;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* Advanced Hero with Glass Effect */
+.hero-section-advanced {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Parallax effect */
+    height: 85vh;
+}
+
+.hero-glass-overlay {
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 800;
+    letter-spacing: -2px;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    max-width: 700px;
+    margin: 0 auto;
+    color: #d1d1d1;
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+
+
+/* For New.ejs */
+/* Glassmorphism Panel */
+.glass-content-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.text-secondary-light {
+    color: #b0b0b0;
+    font-size: 1.1rem;
+}
+
+/* Neumorphic Image Frame */
+.image-frame-neumorphic {
+    padding: 15px;
+    background: #1a1a1a;
+    border-radius: 2.5rem;
+    box-shadow: 10px 10px 20px #050505, 
+                -5px -5px 15px rgba(255,255,255,0.02);
+}
+
+/* Neumorphic Button */
+.btn-neumorphic-light {
+    display: inline-block;
+    background: #ffffff;
+    color: #000;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.btn-neumorphic-light:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(255,255,255,0.1);
+    background: #f0f0f0;
+}
+
+/* Animations */
+.animate-slide-left {
+    animation: slideLeft 1s ease-out;
+}
+
+.animate-slide-right {
+    animation: slideRight 1s ease-out;
+}
+
+@keyframes slideLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+
+/* For boilerplate code */
+/* Ensure the base background is dark everywhere */
+.dark-theme-base {
+    background-color: #0f0f0f; /* Your signature dark color */
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Push footer to the bottom if content is short */
+main {
+    flex: 1 0 auto;
+}
+
+/* Smooth Scrolling for the whole site */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar for a premium feel */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #0f0f0f;
+}
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Global Transition for buttons and links */
+a, button {
+    transition: all 0.3s ease-in-out !important;
+}
+
+
+/* Footer.ejs */
+/* Footer Container - Glassmorphism */
+.custom-footer {
+    background:rgba(148, 150, 157, 0.8); /* Deep Charcoal Grey, not black */
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: #e0e0e0;
+}
+
+.footer-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.footer-tagline {
+    color: #a0a0a0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Neumorphic Social Buttons */
+.footer-social-cluster {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.social-link-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: #4a4a4a; /* Professional greyish background */
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
     font-weight: 500;
-    color: #555 !important;
-    margin: 0 10px;
-    transition: color 0.3s ease;
-    position: relative;
-  }
+    transition: all 0.3s ease; /* Smooth transition for the hover effect */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
 
-  /* Animated underline effect on hover */
-  .nav-link::after {
+.social-link-btn:hover {
+    background-color: #000000; /* Becomes black on hover */
+    transform: translateY(-3px); /* Subtle lift effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Shadow adds depth */
+    color: #ffffff !important;
+}
+
+/* Optional: Neumorphic touch to match your form */
+.social-link-btn {
+    box-shadow: 3px 3px 6px #0b0b0c, 
+                -1px -1px 4px rgba(255, 255, 255, 0.05);
+}
+
+/* Policy Links */
+.footer-policy-links a {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.footer-policy-links a:hover {
+    color: #fff;
+}
+
+/* Divider Styling */
+.footer-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+.copyright-text {
+    font-size: 0.8rem;
+    color: #666;
+    letter-spacing: 1px;
+}
+
+/* navbar.ejs */
+/* Glassmorphism Navbar */
+.glass-navbar {
+    background: rgba(148, 150, 157, 0.8) !important; /* Slate grey with transparency */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.8rem 0;
+    transition: all 0.4s ease;
+}
+
+/* Brand Styling */
+.brand-text {
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.brand-icon-wrapper {
+    width: 35px;
+    height: 35px;
+    background: #1e1f22;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-shadow: 3px 3px 6px #0b0b0c, -1px -1px 4px rgba(255,255,255,0.05);
+}
+
+/* Nav Links with Underline Animation */
+.nav-link-custom {
+    color: #d1d1d1 !important;
+    font-weight: 500;
+    margin: 0 10px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link-custom:hover {
+    color: #ffffff !important;
+}
+
+.nav-link-custom::after {
     content: '';
     position: absolute;
     width: 0;
     height: 2px;
-    display: block;
-    margin-top: 2px;
-    right: 0;
-    background: #007bff; /* Primary blue accent */
-    transition: width 0.3s ease;
-    -webkit-transition: width 0.3s ease;
-  }
-
-  .nav-link:hover::after {
-    width: 100%;
+    bottom: 0;
     left: 0;
-    background: #007bff;
-  }
+    background-color: #ffffff;
+    transition: width 0.3s ease;
+}
 
-  .nav-link:hover {
-    color: #007bff !important;
-  }
-  
-.custom-footer {
-    background-color: #f8f9fa !important; /* Matching your navbar light grey */
-    border-top: 1px solid #e0e0e0;
-    padding: 3rem 0 1.5rem 0;
-    color: #555;
-    font-family: inherit;
-  }
+.nav-link-custom:hover::after {
+    width: 100%;
+}
 
-  .footer-brand {
-    font-weight: 700;
-    color: #333 !important;
-    letter-spacing: 1px;
+/* Neumorphic Login Button */
+.btn-login-neumorphic {
+    padding: 8px 25px;
+    background: #1e1f22;
+    color: #ffffff !important;
     text-decoration: none;
-    font-size: 1.25rem;
-  }
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 4px 4px 8px #0b0b0c, -2px -2px 6px rgba(255,255,255,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.02);
+}
 
-  .footer-info-socials a {
-    color: #555;
-    font-size: 1.5rem;
-    margin-right: 15px;
-    transition: color 0.3s ease, transform 0.3s ease;
-    display: inline-block;
-  }
+.btn-login-neumorphic:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 12px #080809, -3px -3px 8px rgba(255,255,255,0.07);
+    color: #ffffff;
+}
 
-  .footer-info-socials a:hover {
-    color: #007bff; /* Matching your navbar blue accent */
-    transform: translateY(-3px);
-  }
-
-  .footer-info-links a {
-    color: #6c757d;
-    text-decoration: none;
-    margin-left: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-
-  .footer-info-links a:hover {
-    color: #007bff;
-  }
-
-  .copyright-text {
-    font-size: 0.85rem;
-    color: #888;
-  }
+/* Fix for Mobile Toggler */
+.navbar-toggler:focus {
+    box-shadow: none;
+}

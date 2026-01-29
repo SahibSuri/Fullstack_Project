@@ -1,19 +1,54 @@
 <% layout('layouts/boilerplate') %>
-<body>
-    <h2>Create a New Listing</h2>
-    <form action="/listing" method="post">
-        <input type="text" name="listing[title]" placeholder="Enter the title">
-        <br>
-        <textarea name="listing[description]" id="" placeholder="write about your hotel"></textarea>
-        <br>
-        <input type="text" name="listing[image]" placeholder="Enter image (URL)">
-        <br>
-        <input type="text" name="listing[price]" placeholder="Enter the price">
-        <br>
-        <input type="text" name="listing[locat]ion" placeholder="Enter the location">
-        <br>
-        <input type="text" name="listing[country]" placeholder="Enter the country">
-        <br>
-        <button>ADD</button>
-    </form>
-</body>
+
+<div class="new-listing-wrapper">
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="glass-form-container animate-fade-in">
+            <h2 class="form-title">Create a New Listing</h2>
+            <p class="form-subtitle">Share your sanctuary with the world</p>
+            
+            <form action="/listing" method="post" class="mt-4">
+                <div class="input-group-custom">
+                    <label>Title</label>
+                    <input type="text" name="listing[title]" placeholder="e.g. Serene Mountain Retreat" required>
+                </div>
+
+                <div class="input-group-custom">
+                    <label>Description</label>
+                    <textarea name="listing[description]" rows="4" placeholder="Describe the soul of your hotel..." required></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group-custom">
+                            <label>Price per Night</label>
+                            <input type="number" name="listing[price]" placeholder="₹" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group-custom">
+                            <label>Image URL</label>
+                            <input type="text" name="listing[image]" placeholder="https://..." required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group-custom">
+                            <label>Location</label>
+                            <input type="text" name="listing[location]" placeholder="e.g. Katra, J&K" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group-custom">
+                            <label>Country</label>
+                            <input type="text" name="listing[country]" placeholder="e.g. India" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-neumorphic mt-4">Create Listing</button>
+            </form>
+        </div>
+    </div>
+</div>
