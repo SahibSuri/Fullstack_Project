@@ -1,29 +1,254 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container mt-4">
-  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
-    <% alllistings.forEach(listing => { %>
-      <div class="col">
-        <a href="/listing/<%= listing.id %>" class="listing-link">
-          <div class="card h-100 listing-card border-0">
-            <img 
-              src="<%= listing.image.url %>" 
-              class="card-img-top" 
-              alt="listing_image" 
-              style="height: 20rem; object-fit: cover;"
-            >
-            <div class="card-body px-0">
-              <h5 class="card-title"><b><%= listing.title %></b></h5>
-              <p class="card-text text-muted">
-                <%= listing.description.substring(0, 100) %>...
-              </p>
-              <div class="d-grid">
-                 <span class="btn btn-outline-dark btn-sm">View Details</span>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap');
+
+  :root {
+    --gold-light: #f5d98a;
+    --gold-mid: #d4a843;
+    --gold-dark: #a07520;
+    --gold-shine: #ffe9a0;
+    --deep-bg: #0a0804;
+    --card-bg: #0f0c06;
+    --text-muted: #9a8a6a;
+    --text-light: #e8d9b0;
+  }
+
+  body {
+    background: var(--deep-bg);
+    font-family: 'Raleway', sans-serif;
+    color: var(--text-light);
+  }
+
+  /* Page header */
+  .listings-header {
+    text-align: center;
+    padding: 4rem 0 3rem;
+    position: relative;
+  }
+
+  .listings-header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid), var(--gold-light), var(--gold-shine), var(--gold-mid));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: goldShimmer 4s linear infinite;
+    letter-spacing: 0.1em;
+  }
+
+  @keyframes goldShimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .listings-header .ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem auto;
+  }
+  .ornament-line {
+    height: 1px;
+    width: 80px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+  }
+  .ornament-diamond {
+    width: 7px;
+    height: 7px;
+    background: var(--gold-mid);
+    transform: rotate(45deg);
+    box-shadow: 0 0 8px var(--gold-mid);
+  }
+
+  /* Listing card */
+  .listing-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+
+  .listing-card {
+    background: linear-gradient(160deg, #131008, #0e0c07);
+    border: 1px solid rgba(212,168,67,0.15) !important;
+    border-radius: 4px !important;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(.23,1,.32,1), box-shadow 0.4s ease, border-color 0.4s ease;
+    position: relative;
+  }
+
+  .listing-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-shine), var(--gold-mid), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2;
+  }
+
+  .listing-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(212,168,67,0.45) !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(212,168,67,0.12);
+  }
+
+  .listing-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Image container with overlay */
+  .card-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 20rem;
+  }
+
+  .card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .listing-card:hover .card-img-wrapper img {
+    transform: scale(1.06);
+  }
+
+  .card-img-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,8,4,0.85) 0%, rgba(10,8,4,0.1) 50%, transparent 100%);
+  }
+
+  /* Card body */
+  .listing-card .card-body {
+    padding: 1.2rem 1.4rem 1.5rem !important;
+    position: relative;
+  }
+
+  .listing-card .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.6rem;
+  }
+
+  .listing-card .card-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.98rem;
+    color: var(--text-muted) !important;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  /* View details button */
+  .btn-view-details {
+    display: block;
+    width: 100%;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0.65rem;
+    background: transparent;
+    border: 1px solid rgba(212,168,67,0.35);
+    color: var(--gold-mid);
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-view-details::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .btn-view-details span {
+    position: relative;
+    z-index: 1;
+    transition: color 0.35s ease;
+  }
+
+  .listing-card:hover .btn-view-details {
+    border-color: var(--gold-mid);
+  }
+
+  .listing-card:hover .btn-view-details::before {
+    opacity: 1;
+  }
+
+  .listing-card:hover .btn-view-details span {
+    color: var(--deep-bg);
+  }
+
+  /* Stagger animation for cards */
+  .col:nth-child(1) .listing-card { animation: cardFadeUp 0.6s ease 0.1s both; }
+  .col:nth-child(2) .listing-card { animation: cardFadeUp 0.6s ease 0.2s both; }
+  .col:nth-child(3) .listing-card { animation: cardFadeUp 0.6s ease 0.3s both; }
+  .col:nth-child(4) .listing-card { animation: cardFadeUp 0.6s ease 0.4s both; }
+  .col:nth-child(5) .listing-card { animation: cardFadeUp 0.6s ease 0.5s both; }
+  .col:nth-child(6) .listing-card { animation: cardFadeUp 0.6s ease 0.6s both; }
+
+  @keyframes cardFadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div style="background: var(--deep-bg, #0a0804); min-height: 100vh; padding-bottom: 4rem;">
+  <div class="listings-header">
+    <h1>Our Retreats</h1>
+    <div class="ornament">
+      <div class="ornament-line"></div>
+      <div class="ornament-diamond"></div>
+      <div class="ornament-line"></div>
+    </div>
+    <p style="font-family:'Cormorant Garamond',serif; font-style:italic; color:#9a8a6a; font-size:1.1rem; margin-top:0.5rem;">
+      Each suite, a world unto itself
+    </p>
+  </div>
+
+  <div class="container mt-2">
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+      <% alllistings.forEach(listing => { %>
+        <div class="col">
+          <a href="/listing/<%= listing.id %>" class="listing-link">
+            <div class="card h-100 listing-card border-0">
+              <div class="card-img-wrapper">
+                <img src="<%= listing.image.url %>" alt="listing_image">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title"><%= listing.title %></h5>
+                <p class="card-text">
+                  <%= listing.description.substring(0, 100) %>...
+                </p>
+                <div class="btn-view-details">
+                  <span>View Details</span>
+                </div>
               </div>
             </div>
-          </div>
-        </a>
-      </div>
-    <% }) %>
+          </a>
+        </div>
+      <% }) %>
+    </div>
   </div>
 </div>

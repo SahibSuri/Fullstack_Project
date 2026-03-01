@@ -1,18 +1,209 @@
-<nav class="navbar navbar-expand-lg sticky-top glass-navbar">
-  <div class="container"> 
-    <a class="navbar-brand d-flex align-items-center" href="/">
-      <div class="brand-icon-wrapper me-2">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap');
+
+  :root {
+    --gold-light: #f5d98a;
+    --gold-mid:   #d4a843;
+    --gold-dark:  #a07520;
+    --gold-shine: #ffe9a0;
+    --deep-bg:    #0a0804;
+    --text-muted: #9a8a6a;
+    --text-light: #e8d9b0;
+  }
+
+  body {
+    background: var(--deep-bg);
+    font-family: 'Raleway', sans-serif;
+    color: var(--text-light);
+  }
+
+  /* ── Navbar shell ── */
+  .glass-navbar {
+    background: rgba(8, 6, 2, 0.93) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(212,168,67,0.15);
+    padding: 0.85rem 0;
+    transition: padding 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+
+  /* Thin gold shimmer line across the top */
+  .glass-navbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark) 20%, var(--gold-mid) 40%, var(--gold-shine) 50%, var(--gold-mid) 60%, var(--gold-dark) 80%, transparent);
+  }
+
+  .glass-navbar.scrolled {
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.6), 0 0 20px rgba(212,168,67,0.05);
+  }
+
+  /* ── Brand ── */
+  .navbar-brand { text-decoration: none; }
+
+  .brand-icon-wrapper {
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(212,168,67,0.3);
+    border-radius: 2px;
+    background: rgba(212,168,67,0.06);
+    transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .navbar-brand:hover .brand-icon-wrapper {
+    border-color: rgba(212,168,67,0.65);
+    box-shadow: 0 0 12px rgba(212,168,67,0.18);
+  }
+
+  .brand-icon-wrapper i {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 0.95rem;
+  }
+
+  .brand-text {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid), var(--gold-light));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: background-position 0.5s ease;
+  }
+
+  .navbar-brand:hover .brand-text { background-position: right center; }
+
+  /* ── Nav links ── */
+  .nav-link-custom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted) !important;
+    text-decoration: none;
+    padding: 0.5rem 0.9rem !important;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link-custom::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+    transition: width 0.35s ease;
+  }
+
+  .nav-link-custom:hover            { color: var(--gold-light) !important; }
+  .nav-link-custom:hover::after     { width: 80%; }
+  .nav-link-custom.active           { color: var(--gold-mid) !important; }
+  .nav-link-custom.active::after    { width: 80%; }
+
+  /* ── Login CTA ── */
+  .btn-login-neumorphic {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.63rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--deep-bg) !important;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid), var(--gold-shine), var(--gold-mid), var(--gold-dark));
+    background-size: 200% auto;
+    padding: 0.55rem 1.4rem;
+    border-radius: 2px;
+    position: relative; overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 2px 14px rgba(212,168,67,0.3);
+  }
+
+  .btn-login-neumorphic::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -60%;
+    width: 30%; height: 200%;
+    background: rgba(255,255,255,0.22);
+    transform: skewX(-20deg);
+    transition: left 0.45s ease;
+  }
+
+  .btn-login-neumorphic:hover {
+    background-position: right center;
+    box-shadow: 0 4px 22px rgba(212,168,67,0.5);
+    transform: translateY(-1px);
+    color: var(--deep-bg) !important;
+  }
+
+  .btn-login-neumorphic:hover::before { left: 140%; }
+
+  /* ── Toggler ── */
+  .navbar-toggler {
+    border: 1px solid rgba(212,168,67,0.25) !important;
+    border-radius: 2px !important;
+    padding: 0.4rem 0.7rem !important;
+    transition: border-color 0.3s ease;
+  }
+  .navbar-toggler:hover { border-color: rgba(212,168,67,0.55) !important; }
+  .navbar-toggler i {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1rem;
+  }
+
+  /* ── Mobile collapse panel ── */
+  @media (max-width: 991px) {
+    .navbar-collapse {
+      background: rgba(10,8,4,0.97);
+      border: 1px solid rgba(212,168,67,0.12);
+      border-radius: 2px;
+      padding: 1rem 1.5rem;
+      margin-top: 0.75rem;
+    }
+    .nav-link-custom {
+      padding: 0.7rem 0 !important;
+      border-bottom: 1px solid rgba(212,168,67,0.07);
+      display: block;
+    }
+    .btn-login-neumorphic {
+      display: block;
+      text-align: center;
+      margin-top: 0.75rem;
+    }
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg sticky-top glass-navbar" id="mainNavbar">
+  <div class="container">
+
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+      <div class="brand-icon-wrapper">
         <i class="fa-solid fa-hotel"></i>
       </div>
       <span class="brand-text">Empire's ਹੋਟਲ</span>
     </a>
-    
-    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+    <button class="navbar-toggler border-0 shadow-none" type="button"
+      data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fa-solid fa-bars-staggered text-white"></i>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto align-items-center"> 
+      <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item">
           <a class="nav-link nav-link-custom" href="/">Home</a>
         </li>
@@ -27,5 +218,16 @@
         </li>
       </ul>
     </div>
+
   </div>
 </nav>
+
+<script>
+  const navbar = document.getElementById('mainNavbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+  document.querySelectorAll('.nav-link-custom').forEach(link => {
+    if (link.href === window.location.href) link.classList.add('active');
+  });
+</script>

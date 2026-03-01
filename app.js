@@ -57,11 +57,15 @@ app.get('/listing/:id' , async (req,res)=>{
 })
 
 // CREATE route
-app.post('/listing' , async (req , res)=>{
-    const CreatedListing = new listing(req.body.listing)
-    await CreatedListing.save()
-    res.redirect('/listing')
-    console.log(CreatedListing)
+app.post('/listing' , async (req , res , next)=>{
+    try {
+        const CreatedListing = new listing(req.body.listing)
+        await CreatedListing.save()
+        res.redirect('/listing')
+        console.log(CreatedListing)
+    } catch (err) {
+        next(err)
+    }
 })
 
 // EDIT route
@@ -86,4 +90,6 @@ app.delete('/listing/:id' , async (req , res)=>{
     res.redirect('/listing')
 })
 
-// 
+app.use((err , req , res , next)=>{
+    res.send("Something went wrong")
+})

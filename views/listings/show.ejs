@@ -1,50 +1,334 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="show-page-wrapper py-5">
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            
-            <div class="col-lg-10 mb-4 animate-fade-in">
-                <h2 class="display-5 fw-bold text-white"><%= listingID.title %></h2>
-                <p class="text-secondary"><i class="fa-solid fa-location-dot me-2"></i><%= listingID.location %>, <%= listingID.country %></p>
-            </div>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap');
 
-            <div class="col-lg-10 mb-5 animate-slide-up">
-                <div class="show-card-img shadow-lg">
-                    <img src="<%= listingID.image.url %>" class="img-fluid rounded-4" alt="listing_image">
-                </div>
-            </div>
+  :root {
+    --gold-light: #f5d98a;
+    --gold-mid: #d4a843;
+    --gold-dark: #a07520;
+    --gold-shine: #ffe9a0;
+    --deep-bg: #0a0804;
+    --text-muted: #9a8a6a;
+    --text-light: #e8d9b0;
+  }
 
-            <div class="col-lg-10">
-                <div class="glass-card p-4 p-md-5 animate-slide-up-delayed">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h4 class="text-white mb-3">Experience Purity</h4>
-                            <p class="listing-description text-secondary">
-                                <%= listingID.description %>
-                            </p>
-                        </div>
-                        <div class="col-md-4 text-md-end mt-4 mt-md-0">
-                            <div class="price-tag mb-4">
-                                <span class="h2 text-white fw-bold">₹<%= listingID.price.toLocaleString("en-IN") %></span>
-                                <span class="text-secondary d-block">per night</span>
-                            </div>
-                            
-                            <div class="d-flex flex-column gap-3">
-                                <a href="/listing/<%= listingID._id %>/edit" class="btn btn-outline-light rounded-pill py-2">
-                                    <i class="fa-regular fa-pen-to-square me-2"></i>Edit Details
-                                </a>
-                                <form action="/listing/<%= listingID._id %>?_method=DELETE" method="POST" class="w-100">
-                                    <button class="btn btn-dark-danger w-100 rounded-pill py-2">
-                                        <i class="fa-solid fa-trash-can me-2"></i>Delete Listing
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  body {
+    background: var(--deep-bg);
+    font-family: 'Raleway', sans-serif;
+    color: var(--text-light);
+  }
 
+  .show-page-wrapper {
+    background: 
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(212,168,67,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 10% 80%, rgba(160,117,32,0.06) 0%, transparent 60%),
+      var(--deep-bg);
+    min-height: 100vh;
+    padding: 3rem 0 5rem;
+  }
+
+  /* Back breadcrumb */
+  .breadcrumb-gold {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+    margin-bottom: 2rem;
+  }
+  .breadcrumb-gold:hover { color: var(--gold-mid); }
+  .breadcrumb-gold i { font-size: 0.7rem; }
+
+  /* Title section */
+  .listing-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid), var(--gold-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .listing-location {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    animation: fadeDown 0.8s ease 0.15s both;
+  }
+  .listing-location i { color: var(--gold-dark); }
+
+  /* Image frame */
+  .show-img-frame {
+    position: relative;
+    border: 1px solid rgba(212,168,67,0.2);
+    padding: 8px;
+    border-radius: 4px;
+    background: rgba(15,12,6,0.8);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(212,168,67,0.08);
+    animation: fadeUp 0.9s ease 0.2s both;
+    overflow: hidden;
+  }
+
+  .show-img-frame::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-shine), var(--gold-mid), transparent);
+    z-index: 2;
+  }
+
+  .show-img-frame img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    border-radius: 2px;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .show-img-frame:hover img {
+    transform: scale(1.02);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Detail card */
+  .glass-card {
+    background: linear-gradient(160deg, rgba(20,15,5,0.95), rgba(15,12,6,0.98));
+    border: 1px solid rgba(212,168,67,0.18);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.9s ease 0.35s both;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,168,67,0.6), var(--gold-shine), rgba(212,168,67,0.6), transparent);
+  }
+
+  /* Corner ornaments */
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle at bottom right, rgba(212,168,67,0.06), transparent 70%);
+    pointer-events: none;
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.8rem;
+  }
+
+  .listing-description {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: var(--text-muted) !important;
+  }
+
+  /* Divider */
+  .gold-divider {
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(212,168,67,0.3), transparent);
+    align-self: stretch;
+    margin: 0 2rem;
+  }
+
+  /* Price */
+  .price-block {
+    text-align: right;
+  }
+
+  .price-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .price-amount {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid), var(--gold-shine));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .price-per {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-top: 0.2rem;
+  }
+
+  /* Action buttons */
+  .btn-edit-gold {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0.85rem 1.5rem;
+    border: 1px solid rgba(212,168,67,0.4);
+    color: var(--gold-mid);
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.35s ease;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-edit-gold::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .btn-edit-gold span { position: relative; z-index: 1; }
+
+  .btn-edit-gold:hover {
+    color: var(--deep-bg);
+    border-color: var(--gold-mid);
+    box-shadow: 0 0 20px rgba(212,168,67,0.25);
+  }
+  .btn-edit-gold:hover::before { opacity: 1; }
+
+  .btn-delete-danger {
+    display: block;
+    width: 100%;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0.85rem 1.5rem;
+    border: 1px solid rgba(180,50,50,0.35);
+    color: #c0706a;
+    background: transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-delete-danger::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #7a2020, #c0504a);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .btn-delete-danger span { position: relative; z-index: 1; }
+
+  .btn-delete-danger:hover {
+    color: #fff;
+    border-color: #c0504a;
+    box-shadow: 0 0 20px rgba(192,80,74,0.2);
+  }
+  .btn-delete-danger:hover::before { opacity: 1; }
+</style>
+
+<div class="show-page-wrapper">
+  <div class="container">
+    <div class="row justify-content-center">
+      
+      <div class="col-lg-10 mb-2">
+        <a href="/listing" class="breadcrumb-gold">
+          <i class="fa-solid fa-arrow-left"></i> All Retreats
+        </a>
+      </div>
+
+      <div class="col-lg-10 mb-3">
+        <h2 class="listing-title"><%= listingID.title %></h2>
+        <p class="listing-location">
+          <i class="fa-solid fa-location-dot me-2"></i><%= listingID.location %>, <%= listingID.country %>
+        </p>
+      </div>
+
+      <div class="col-lg-10 mb-4">
+        <div class="show-img-frame">
+          <img src="<%= listingID.image.url %>" alt="listing_image">
         </div>
+      </div>
+
+      <div class="col-lg-10">
+        <div class="glass-card p-4 p-md-5">
+          <div class="row align-items-start">
+            
+            <div class="col-md-8">
+              <p class="section-label">About this Retreat</p>
+              <p class="listing-description"><%= listingID.description %></p>
+            </div>
+
+            <div class="d-none d-md-block gold-divider"></div>
+
+            <div class="col-md-3 mt-4 mt-md-0">
+              <div class="price-block mb-4">
+                <p class="price-label">Rate</p>
+                <div class="price-amount">₹<%= listingID.price.toLocaleString("en-IN") %></div>
+                <div class="price-per">per night</div>
+              </div>
+
+              <div class="d-flex flex-column gap-3">
+                <a href="/listing/<%= listingID._id %>/edit" class="btn-edit-gold">
+                  <span><i class="fa-regular fa-pen-to-square me-2"></i>Edit Details</span>
+                </a>
+                <form action="/listing/<%= listingID._id %>?_method=DELETE" method="POST">
+                  <button class="btn-delete-danger w-100">
+                    <span><i class="fa-solid fa-trash-can me-2"></i>Delete</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
 </div>

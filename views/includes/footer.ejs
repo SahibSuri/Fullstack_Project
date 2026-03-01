@@ -1,6 +1,199 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@1,300&family=Raleway:wght@300;400&display=swap');
+
+  /* ── Footer shell ── */
+  .custom-footer {
+    background: linear-gradient(180deg, #0a0804 0%, #070502 100%);
+    border-top: 1px solid rgba(212,168,67,0.15);
+    padding: 3.5rem 0 2rem;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Raleway', sans-serif;
+  }
+
+  /* Gold shimmer line along the top edge */
+  .custom-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      #a07520 15%, #d4a843 35%, #ffe9a0 50%, #d4a843 65%, #a07520 85%,
+      transparent
+    );
+  }
+
+  /* Soft ambient glow just behind the top line */
+  .custom-footer::after {
+    content: '';
+    position: absolute;
+    top: -40px; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 80px;
+    background: radial-gradient(ellipse, rgba(212,168,67,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Brand ── */
+  .footer-brand {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    background: linear-gradient(135deg, #a07520, #d4a843, #f5d98a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: filter 0.3s ease;
+  }
+
+  .footer-brand:hover { filter: brightness(1.25); }
+
+  .footer-brand i {
+    background: linear-gradient(135deg, #a07520, #d4a843);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .custom-footer .small {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: #9a8a6a;
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+
+  /* ── Social buttons ── */
+  .social-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #9a8a6a;
+    border: 1px solid rgba(212,168,67,0.15);
+    padding: 0.5rem 0.85rem;
+    border-radius: 2px;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .social-link-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(212,168,67,0.08), rgba(160,117,32,0.05));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .social-link-btn:hover {
+    color: #f5d98a;
+    border-color: rgba(212,168,67,0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(212,168,67,0.12);
+  }
+
+  .social-link-btn:hover::before { opacity: 1; }
+
+  /* ── Policy links ── */
+  .footer-info-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    align-items: flex-end;
+  }
+
+  @media (max-width: 767px) {
+    .footer-info-links { align-items: center; }
+  }
+
+  .footer-info-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #9a8a6a;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .footer-info-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, #a07520, #d4a843);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .footer-info-links a:hover           { color: #f5d98a; }
+  .footer-info-links a:hover::after    { transform: scaleX(1); }
+
+  /* ── Divider ── */
+  .footer-hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(212,168,67,0.2) 20%,
+      rgba(212,168,67,0.35) 50%,
+      rgba(212,168,67,0.2) 80%,
+      transparent
+    );
+    margin: 2.5rem 0 1.5rem;
+  }
+
+  /* ── Ornament above copyright ── */
+  .footer-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-ornament .f-line {
+    height: 1px; width: 55px;
+    background: linear-gradient(90deg, transparent, rgba(212,168,67,0.3), transparent);
+  }
+
+  .footer-ornament .f-diamond {
+    width: 5px; height: 5px;
+    background: #a07520;
+    transform: rotate(45deg);
+    box-shadow: 0 0 6px rgba(212,168,67,0.4);
+  }
+
+  /* ── Copyright ── */
+  .copyright-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(154,138,106,0.45);
+  }
+</style>
+
 <footer class="custom-footer mt-5">
   <div class="container">
     <div class="row align-items-center">
+
+      <!-- Brand & tagline -->
       <div class="col-md-4 text-center text-md-start mb-4 mb-md-0">
         <a class="footer-brand d-flex align-items-center justify-content-center justify-content-md-start" href="/">
           <i class="bi bi-buildings-fill me-2"></i> Empire's ਹੋਟਲ
@@ -8,29 +201,38 @@
         <p class="mt-2 small">Experience luxury in the foothills of Maa Vaishno Devi.</p>
       </div>
 
+      <!-- Socials -->
       <div class="col-md-4 text-center mb-4 mb-md-0">
-  <div class="footer-info-socials d-flex justify-content-center gap-3">
-    <a href="https://www.linkedin.com/in/sahib-suri/" class="social-link-btn">
-        <i class="bi bi-linkedin me-1"></i> LinkedIn
-    </a>
-    <a href="https://www.instagram.com/sahib.suri/" class="social-link-btn">
-        <i class="bi bi-instagram me-1"></i> Instagram
-    </a>
-    <a href="https://x.com/SahibSuri413517" class="social-link-btn">
-        <i class="bi bi-twitter-x me-1"></i> Twitter(X)
-    </a>
-  </div>
-</div>
+        <div class="footer-info-socials d-flex justify-content-center gap-3">
+          <a href="https://www.linkedin.com/in/sahib-suri/" class="social-link-btn">
+            <i class="bi bi-linkedin me-1"></i> LinkedIn
+          </a>
+          <a href="https://www.instagram.com/sahib.suri/" class="social-link-btn">
+            <i class="bi bi-instagram me-1"></i> Instagram
+          </a>
+          <a href="https://x.com/SahibSuri413517" class="social-link-btn">
+            <i class="bi bi-twitter-x me-1"></i> Twitter(X)
+          </a>
+        </div>
+      </div>
 
+      <!-- Legal links -->
       <div class="col-md-4 text-center text-md-end">
         <div class="footer-info-links">
           <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms & Conditions</a>
+          <a href="/terms">Terms &amp; Conditions</a>
         </div>
       </div>
+
     </div>
 
-    <hr class="my-4" style="opacity: 0.1;">
+    <hr class="footer-hr">
+
+    <div class="footer-ornament">
+      <div class="f-line"></div>
+      <div class="f-diamond"></div>
+      <div class="f-line"></div>
+    </div>
 
     <div class="row">
       <div class="col-12 text-center">

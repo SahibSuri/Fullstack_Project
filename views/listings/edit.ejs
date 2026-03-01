@@ -1,19 +1,270 @@
 <% layout('layouts/boilerplate') %>
-<body>
-    
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap');
+
+  :root {
+    --gold-light: #f5d98a;
+    --gold-mid: #d4a843;
+    --gold-dark: #a07520;
+    --gold-shine: #ffe9a0;
+    --deep-bg: #0a0804;
+    --text-muted: #9a8a6a;
+    --text-light: #e8d9b0;
+  }
+
+  body {
+    background: var(--deep-bg);
+    font-family: 'Raleway', sans-serif;
+    color: var(--text-light);
+  }
+
+  .edit-listing-wrapper {
+    background:
+      radial-gradient(ellipse 60% 40% at 30% 0%, rgba(212,168,67,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 70% 100%, rgba(160,117,32,0.05) 0%, transparent 60%),
+      var(--deep-bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem;
+  }
+
+  .glass-form-container {
+    width: 100%;
+    max-width: 700px;
+    background: linear-gradient(160deg, rgba(18,14,5,0.97), rgba(12,10,4,0.99));
+    border: 1px solid rgba(212,168,67,0.2);
+    border-radius: 4px;
+    padding: 3rem 3.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 60px rgba(212,168,67,0.06);
+    animation: formReveal 0.9s cubic-bezier(.23,1,.32,1) both;
+  }
+
+  @keyframes formReveal {
+    from { opacity: 0; transform: translateY(30px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .glass-form-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark), var(--gold-mid), var(--gold-shine), var(--gold-mid), var(--gold-dark), transparent);
+  }
+
+  .form-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid), var(--gold-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  .form-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--text-muted);
+    text-align: center;
+    font-size: 1.05rem;
+  }
+
+  .form-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 1.2rem 0 2rem;
+  }
+  .form-ornament .line {
+    height: 1px;
+    flex: 1;
+    max-width: 80px;
+    background: linear-gradient(90deg, transparent, rgba(212,168,67,0.4), transparent);
+  }
+  .form-ornament .dot {
+    width: 5px; height: 5px;
+    background: var(--gold-dark);
+    transform: rotate(45deg);
+  }
+
+  .input-group-custom {
+    margin-bottom: 1.4rem;
+  }
+
+  .input-group-custom label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .input-group-custom input,
+  .input-group-custom textarea {
+    width: 100%;
+    background: rgba(5,4,2,0.8);
+    border: 1px solid rgba(212,168,67,0.18);
+    border-radius: 2px;
+    padding: 0.85rem 1.1rem;
+    color: var(--text-light);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    outline: none;
+    resize: none;
+  }
+
+  .input-group-custom input::placeholder,
+  .input-group-custom textarea::placeholder {
+    color: rgba(154,138,106,0.4);
+    font-style: italic;
+  }
+
+  .input-group-custom input:focus,
+  .input-group-custom textarea:focus {
+    border-color: rgba(212,168,67,0.55);
+    box-shadow: 0 0 0 3px rgba(212,168,67,0.08), 0 0 15px rgba(212,168,67,0.08);
+    background: rgba(10,8,3,0.9);
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn-neumorphic {
+    flex: 1;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--deep-bg);
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-mid) 40%, var(--gold-shine) 60%, var(--gold-mid) 80%, var(--gold-dark) 100%);
+    background-size: 200% auto;
+    border: none;
+    padding: 1rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 20px rgba(212,168,67,0.35);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-neumorphic::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -60%;
+    width: 30%; height: 200%;
+    background: rgba(255,255,255,0.25);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+  }
+
+  .btn-neumorphic:hover {
+    background-position: right center;
+    box-shadow: 0 6px 30px rgba(212,168,67,0.55);
+    transform: translateY(-1px);
+  }
+
+  .btn-neumorphic:hover::before {
+    left: 140%;
+  }
+
+  .btn-cancel {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid rgba(154,138,106,0.25);
+    padding: 1rem 1.5rem;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    background: transparent;
+  }
+
+  .btn-cancel:hover {
+    color: var(--text-light);
+    border-color: rgba(154,138,106,0.5);
+  }
+</style>
+
+<div class="edit-listing-wrapper">
+  <div class="glass-form-container">
+    <h2 class="form-title">Edit Listing</h2>
+    <p class="form-subtitle">Refine every detail to perfection</p>
+    <div class="form-ornament">
+      <div class="line"></div>
+      <div class="dot"></div>
+      <div class="line"></div>
+    </div>
+
     <form method="post" action="/listing/<%= listingID._id %>?_method=PUT">
+      
+      <div class="input-group-custom">
+        <label>Title</label>
         <input type="text" name="listing[title]" placeholder="Enter the title" value="<%= listingID.title %>">
-        <br>
-        <textarea name="listing[description]" id="" placeholder="write about your hotel" value="<%= listingID.description %>"></textarea>
-        <br>
-        <input type="text" name="listing[image]" placeholder="Enter image (URL)" value="<%= listingID.image %>">
-        <br>
-        <input type="text" name="listing[price]" placeholder="Enter the price" value="<%= listingID.price %>">
-        <br>
-        <input type="text" name="listing[locat]ion" placeholder="Enter the location" value="<%= listingID.location %>">
-        <br>
-        <input type="text" name="listing[country]" placeholder="Enter the country" value="<%= listingID.country %>">
-        <br>
-        <button>EDIT</button>
+      </div>
+
+      <div class="input-group-custom">
+        <label>Description</label>
+        <textarea name="listing[description]" rows="4" placeholder="Write about your hotel..."><%= listingID.description %></textarea>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group-custom">
+            <label>Price per Night</label>
+            <input type="text" name="listing[price]" placeholder="Enter the price" value="<%= listingID.price %>">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group-custom">
+            <label>Image URL</label>
+            <input type="text" name="listing[image]" placeholder="https://..." value="<%= listingID.image %>">
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group-custom">
+            <label>Location</label>
+            <input type="text" name="listing[location]" placeholder="Enter the location" value="<%= listingID.location %>">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group-custom">
+            <label>Country</label>
+            <input type="text" name="listing[country]" placeholder="Enter the country" value="<%= listingID.country %>">
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <a href="/listing/<%= listingID._id %>" class="btn-cancel">Cancel</a>
+        <button class="btn-neumorphic"><i class="fa-solid fa-check me-2"></i>Save Changes</button>
+      </div>
+
     </form>
-</body>
+  </div>
+</div>
