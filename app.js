@@ -7,6 +7,8 @@ const Listings = require('./models/listing')
 const path = require('path')
 const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
+const {listingSchema} = require('./schema')
+const {reviewSchema}= require("./schema")
 const Reviews = require("./models/review")
 
 
@@ -34,6 +36,11 @@ app.get('/' , (req,res)=>{
     res.render("listings/home.ejs")
 })
 
+
+
+
+
+
 // INDEX route
 app.get('/listing' , async (req , res)=>{
     const alllistings = await Listings.find({})
@@ -53,7 +60,7 @@ app.get('/listing/new' , (req , res)=>{
 // SHOW Route
 app.get('/listing/:id' , async (req,res)=>{
     let {id} = req.params
-    const listingID = await Listings.findById(id)
+    const listingID = await Listings.findById(id).populate("reviews")
     res.render('listings/show.ejs' , {listingID})
 })
 

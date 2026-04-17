@@ -130,16 +130,6 @@
     background: linear-gradient(90deg, transparent, rgba(212,168,67,0.6), var(--gold-shine), rgba(212,168,67,0.6), transparent);
   }
 
-  /* Corner ornaments */
-  .glass-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; right: 0;
-    width: 100px; height: 100px;
-    background: radial-gradient(circle at bottom right, rgba(212,168,67,0.06), transparent 70%);
-    pointer-events: none;
-  }
-
   .section-label {
     font-family: 'Cinzel', serif;
     font-size: 0.7rem;
@@ -162,6 +152,13 @@
     background: linear-gradient(to bottom, transparent, rgba(212,168,67,0.3), transparent);
     align-self: stretch;
     margin: 0 2rem;
+  }
+
+  .gold-divider-horizontal {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,168,67,0.3), transparent);
+    width: 100%;
+    margin: 3rem 0;
   }
 
   /* Price */
@@ -270,6 +267,27 @@
     box-shadow: 0 0 20px rgba(192,80,74,0.2);
   }
   .btn-delete-danger:hover::before { opacity: 1; }
+
+  /* Review Specific Styles */
+  .review-textarea {
+    background: rgba(10, 8, 4, 0.6) !important;
+    border: 1px solid rgba(212, 168, 67, 0.2) !important;
+    color: var(--text-light) !important;
+    font-family: 'Raleway', sans-serif;
+    border-radius: 2px;
+  }
+
+  .review-textarea:focus {
+    box-shadow: 0 0 10px rgba(212, 168, 67, 0.15) !important;
+    border-color: var(--gold-mid) !important;
+  }
+
+  .gold-range::-webkit-slider-runnable-track { background: rgba(212, 168, 67, 0.1); height: 4px; }
+  .gold-range::-webkit-slider-thumb { background: var(--gold-mid); margin-top: -6px; }
+
+  .review-stars { color: var(--gold-mid); font-size: 0.8rem; letter-spacing: 2px; }
+  .review-card { border-left: 3px solid var(--gold-dark) !important; transition: transform 0.3s ease; }
+  .review-card:hover { transform: translateX(5px); background: rgba(25, 20, 10, 0.98); }
 </style>
 
 <div class="show-page-wrapper">
@@ -298,7 +316,6 @@
       <div class="col-lg-10">
         <div class="glass-card p-4 p-md-5">
           <div class="row align-items-start">
-            
             <div class="col-md-8">
               <p class="section-label">About this Retreat</p>
               <p class="listing-description"><%= listingID.description %></p>
@@ -323,38 +340,62 @@
                   </button>
                 </form>
               </div>
-              <!-- .... -->
-              <div class="d-flex flex-column gap-3">
-                  <h4 class="mb-2">Leave a Review</h4>
-                              
-                  <form action="/listing/<%= listingID._id %>/reviews" method="POST" class="d-flex flex-column gap-3">
-                    <div>
-                      <label for="rating" class="form-label">Rating</label>
-                      <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]">
-                    </div>
-                  
-                    <div>
-                      <label for="comment" class="form-label">Comments</label>
-                      <textarea 
-                        name="review[comment]" 
-                        id="comment" 
-                        class="form-control" 
-                        rows="5" 
-                        placeholder="Write your thoughts here..." 
-                        required
-                      ></textarea>
-                    </div>
-                  
-                    <button class="btn-edit-gold border-0 w-100">
-                      <span><i class="fa-solid fa-paper-plane me-2"></i>Submit Review</span>
-                    </button>
-                  </form>
-                </div>
-
+            </div>
           </div>
-        </div>
-      </div>
 
+          <div class="gold-divider-horizontal"></div>
+          
+          <div class="row g-5">
+            <div class="col-md-5">
+              <p class="section-label">Leave a Review</p>
+              <form action="/listing/<%= listingID._id %>/reviews" method="POST" class="needs-validation" novalidate>
+                <div class="mb-4">
+                  <label for="rating" class="price-label d-block mb-2">Rating</label>
+                  <input type="range" class="form-range gold-range" min="1" max="5" id="rating" name="review[rating]">
+                </div>
+              
+                <div class="mb-4">
+                  <label for="comment" class="price-label d-block mb-2">Comments</label>
+                  <textarea 
+                    name="review[comment]" 
+                    id="comment" 
+                    class="form-control review-textarea" 
+                    rows="5" 
+                    placeholder="Write your thoughts here..." 
+                    required
+                  ></textarea>
+                </div>
+              
+                <button class="btn-edit-gold border-0 w-100">
+                  <span><i class="fa-solid fa-paper-plane me-2"></i>Submit Review</span>
+                </button>
+              </form>
+            </div>
+
+            <div class="col-md-7">
+              <p class="section-label mb-4">Guest Reviews</p>
+              <div class="row g-3">
+                <% for(let review of listingID.reviews) { %>
+                  <div class="col-12">
+                    <div class="card glass-card review-card p-3">
+                      <div class="card-body p-0">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                          <div class="review-stars">
+                            <% for(let i=0; i<5; i++) { %>
+                              <i class="fa-<%= i < review.rating ? 'solid' : 'regular' %> fa-star"></i>
+                            <% } %>
+                          </div>
+                        </div>
+                        <p class="listing-description mb-0" style="font-size: 1rem; line-height: 1.6;">
+                          "<%= review.comment %>"
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+          </div> </div> </div>
     </div>
   </div>
 </div>
