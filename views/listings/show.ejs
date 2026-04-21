@@ -288,6 +288,24 @@
   .review-stars { color: var(--gold-mid); font-size: 0.8rem; letter-spacing: 2px; }
   .review-card { border-left: 3px solid var(--gold-dark) !important; transition: transform 0.3s ease; }
   .review-card:hover { transform: translateX(5px); background: rgba(25, 20, 10, 0.98); }
+
+  /* Review Delete Button Styling */
+  .btn-review-delete {
+    background: transparent;
+    border: 1px solid rgba(180,50,50,0.2);
+    color: rgba(180,50,50,0.6);
+    padding: 0.4rem 0.6rem;
+    border-radius: 2px;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .btn-review-delete:hover {
+    background: rgba(180,50,50,0.1);
+    color: #c0706a;
+    border-color: #c0706a;
+    box-shadow: 0 0 10px rgba(180,50,50,0.1);
+  }
 </style>
 
 <div class="show-page-wrapper">
@@ -336,7 +354,7 @@
                 </a>
                 <form action="/listing/<%= listingID._id %>?_method=DELETE" method="POST">
                   <button class="btn-delete-danger w-100">
-                    <span><i class="fa-solid fa-trash-can me-2"></i>Delete</span>
+                    <span><i class="fa-solid fa-trash-can me-2"></i>Delete Listing</span>
                   </button>
                 </form>
               </div>
@@ -375,22 +393,34 @@
             <div class="col-md-7">
               <p class="section-label mb-4">Guest Reviews</p>
               <div class="row g-3">
-                <% for(let review of listingID.reviews) { %>
-                  <div class="col-12">
-                    <div class="card glass-card review-card p-3">
-                      <div class="card-body p-0">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                          <div class="review-stars">
-                            <% for(let i=0; i<5; i++) { %>
-                              <i class="fa-<%= i < review.rating ? 'solid' : 'regular' %> fa-star"></i>
-                            <% } %>
+                <% if(listingID.reviews.length > 0) { %>
+                  <% for(let review of listingID.reviews) { %>
+                    <div class="col-12">
+                      <div class="card glass-card review-card p-3">
+                        <div class="card-body p-0">
+                          <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="review-stars">
+                              <% for(let i=0; i<5; i++) { %>
+                                <i class="fa-<%= i < review.rating ? 'solid' : 'regular' %> fa-star"></i>
+                              <% } %>
+                            </div>
+                            
+                            <form action="/listing/<%= listingID._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                              <button class="btn-review-delete">
+                                <i class="fa-solid fa-trash-can"></i>
+                              </button>
+                            </form>
                           </div>
+                          <p class="listing-description mb-0" style="font-size: 1rem; line-height: 1.6;">
+                            "<%= review.comment %>"
+                          </p>
                         </div>
-                        <p class="listing-description mb-0" style="font-size: 1rem; line-height: 1.6;">
-                          "<%= review.comment %>"
-                        </p>
                       </div>
                     </div>
+                  <% } %>
+                <% } else { %>
+                  <div class="col-12">
+                    <p class="listing-location" style="font-size: 0.9rem;">No reviews yet. Be the first to share your experience.</p>
                   </div>
                 <% } %>
               </div>

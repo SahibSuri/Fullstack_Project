@@ -10,7 +10,12 @@ const ejsMate = require('ejs-mate')
 const {listingSchema} = require('./schema')
 const {reviewSchema}= require("./schema")
 const Reviews = require("./models/review")
+const listing = require('./models/listing')
 
+// these two are for reconstructing routes so that routes becomes manageable easily and app.js have less complexity
+const listings = require('./routes/listing')
+const reviews = require('./routes/review')
+// --------------------------------------------------------//
 
 main()
     .then(()=>{
@@ -32,82 +37,19 @@ async function main(){
     await mongoose.connect(MONGO_URL)
 }
 
+app.listen(PORT , ()=>{
+    console.log(`router is listening on ${PORT}`)
+})
+
 app.get('/' , (req,res)=>{
     res.render("listings/home.ejs")
 })
 
+// for listings
+app.use('/listing' , listings);
 
-
-
-
-
-// INDEX route
-app.get('/listing' , async (req , res)=>{
-    const alllistings = await Listings.find({})
-    res.render("listings/index.ejs" , {alllistings})
-})
-
-
-app.listen(PORT , ()=>{
-    console.log(`app is listening on ${PORT}`)
-})
-
-// New Route  (this route is for creating a new listing)
-app.get('/listing/new' , (req , res)=>{
-    res.render('listings/new.ejs')
-})
-
-// SHOW Route
-app.get('/listing/:id' , async (req,res)=>{
-    let {id} = req.params
-    const listingID = await Listings.findById(id).populate("reviews")
-    res.render('listings/show.ejs' , {listingID})
-})
-
-// CREATE route
-app.post('/listing' , async (req , res , next)=>{
-    try {
-        const CreatedListing = new Listings(req.body.listing)
-        await CreatedListing.save()
-        res.redirect('/listing')
-        console.log(CreatedListing)
-    } catch (err) {
-        next(err)
-    }
-})
-
-// EDIT route
-app.get('/listing/:id/edit' , async (req,res)=>{
-    let {id} = req.params
-    const listingID = await Listings.findById(id)
-    res.render('listings/edit.ejs' , {listingID})
-})
-
-// UPDATE route
-app.put('/listing/:id' , async (req , res)=>{
-    let {id} = req.params
-    await Listings.findByIdAndUpdate(id , {...req.body.listing})
-    res.redirect('/listing')
-})
-
-// DELETE route
-app.delete('/listing/:id' , async (req , res)=>{
-    let {id} = req.params
-    let DeletedListing = await Listings.findByIdAndDelete(id)
-    console.log(DeletedListing)
-    res.redirect('/listing')
-})
-
-// REVIEW route
-app.post('/listing/:id/reviews' , async (req , res)=>{
-    let listing = await Listings.findById(req.params.id)
-    let newReview = new Reviews(req.body.review)
-    listing.reviews.push(newReview)
-
-    await newReview.save()
-    await listing.save()
-    res.redirect(`/listing/${listing._id}`)
-})
+// for reviews
+app.use('/listing/:id/reviews' , reviews);
 
 app.use((err , req , res , next)=>{
     res.send("Something went wrong")
