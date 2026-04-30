@@ -20,6 +20,10 @@ router.get('/new' , (req , res)=>{
 router.get('/:id' , async (req,res)=>{
     let {id} = req.params
     const listingID = await Listings.findById(id).populate("reviews")
+    if(!listing){
+        req.flash("error" , "listing you trying to acess does not exist!!!")
+        res.redirect('/listing')
+    }
     res.render('listings/show.ejs' , {listingID})
 })
 
@@ -28,6 +32,7 @@ router.post('/' , async (req , res , next)=>{
     try {
         const CreatedListing = new Listings(req.body.listing)
         await CreatedListing.save()
+        req.flash("success" , "new listing created!!!")
         res.redirect('/listing')
         console.log(CreatedListing)
     } catch (err) {
@@ -50,9 +55,10 @@ router.put('/:id' , async (req , res)=>{
 })
 
 // DELETE route
-router.delete('/listing/:id' , async (req , res)=>{
+router.delete('/:id' , async (req , res)=>{
     let {id} = req.params
     let DeletedListing = await Listings.findByIdAndDelete(id)
+    req.flash("success" , "listing deleted!!!")
     console.log(DeletedListing)
     res.redirect('/listing')
 })

@@ -7,6 +7,10 @@ const Listings = require('./models/listing')
 const path = require('path')
 const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
+const session = require('express-session')
+const flash = require('connect-flash')
+
+
 const {listingSchema} = require('./schema')
 const {reviewSchema}= require("./schema")
 const Reviews = require("./models/review")
@@ -41,13 +45,34 @@ app.listen(PORT , ()=>{
     console.log(`router is listening on ${PORT}`)
 })
 
+const sessionOptions={
+    secret: "Sahibsuri",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 1000*60*60*24*3,
+        maxAge: 1000*60*60*24*3,
+        httpOnly: true
+    }
+}
+
 app.get('/' , (req,res)=>{
     res.render("listings/home.ejs")
 })
 
+// sessions and flash
+app.use(session(sessionOptions))
+app.use(flash())
+// always remeber ki routes require hone se pehle hi hume sessions or flash ko use karna padega
+
+app.use((req , res , next)=>{
+    res.locals.success = req.flash("success")
+    res.locals.error = req.flash("error")
+    next()
+})
+
 // for listings
 app.use('/listing' , listings);
-
 // for reviews
 app.use('/listing/:id/reviews' , reviews);
 
