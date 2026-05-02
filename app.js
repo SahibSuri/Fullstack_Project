@@ -9,6 +9,9 @@ const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const session = require('express-session')
 const flash = require('connect-flash')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+const User = require('./models/user')
 
 
 const {listingSchema} = require('./schema')
@@ -17,8 +20,9 @@ const Reviews = require("./models/review")
 const listing = require('./models/listing')
 
 // these two are for reconstructing routes so that routes becomes manageable easily and app.js have less complexity
-const listings = require('./routes/listing')
-const reviews = require('./routes/review')
+const listingRouter = require('./routes/listing')
+const reviewRouter = require('./routes/review')
+const userRouter = require('./routes/user')
 // --------------------------------------------------------//
 
 main()
@@ -57,7 +61,7 @@ const sessionOptions={
 }
 
 app.get('/' , (req,res)=>{
-    res.render("listings/home.ejs")
+    res.render("/listings/home")
 })
 
 // sessions and flash
@@ -65,16 +69,37 @@ app.use(session(sessionOptions))
 app.use(flash())
 // always remeber ki routes require hone se pehle hi hume sessions or flash ko use karna padega
 
+app.use(passport.initialize())
+app.use(passport.session())  // a web browser needs the ability to identify the user as they browse from page to page
+passport.use(new LocalStrategy(User.authenticate()))
+
+// to serialize user into the session
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
+
 app.use((req , res , next)=>{
     res.locals.success = req.flash("success")
     res.locals.error = req.flash("error")
     next()
 })
 
+app.get('/demouser' , async (req , res)=>{
+    let fakeUser = new User({
+        email: "student@gmail.com",
+        username: "Student"
+    })
+
+    let registeredUser  = await User.register(fakeUser , "sahibsuri")
+    res.send(registeredUser)
+})
+
 // for listings
-app.use('/listing' , listings);
+app.use('/listing' , listingRouter);
 // for reviews
-app.use('/listing/:id/reviews' , reviews);
+app.use('/listing/:id/reviews' , reviewRouter);
+// for user
+app.use('/' , userRouter)
 
 app.use((err , req , res , next)=>{
     res.send("Something went wrong")
