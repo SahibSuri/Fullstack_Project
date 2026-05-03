@@ -4,6 +4,7 @@ const {listingSchema} = require('../schema')
 const {reviewSchema}= require("../schema")
 const Listings = require('../models/listing')
 const listing = require('../models/listing')
+const {isLoggedIn} = require('../middlewares')
 
 
 router.get('/' , async (req , res)=>{
@@ -12,7 +13,8 @@ router.get('/' , async (req , res)=>{
 })
 
 // New Route  (this route is for creating a new listing)
-router.get('/new' , (req , res)=>{
+router.get('/new' , isLoggedIn , (req , res)=>{
+    console.log(req.user)
     res.render('listings/new.ejs')
 })
 
@@ -28,7 +30,7 @@ router.get('/:id' , async (req,res)=>{
 })
 
 // CREATE route
-router.post('/' , async (req , res , next)=>{
+router.post('/' ,isLoggedIn , async (req , res , next)=>{
     try {
         const CreatedListing = new Listings(req.body.listing)
         await CreatedListing.save()
@@ -41,21 +43,21 @@ router.post('/' , async (req , res , next)=>{
 })
 
 // EDIT route
-router.get('/:id/edit' , async (req,res)=>{
+router.get('/:id/edit' ,isLoggedIn , async (req,res)=>{
     let {id} = req.params
     const listingID = await Listings.findById(id)
     res.render('listings/edit.ejs' , {listingID})
 })
 
 // UPDATE route
-router.put('/:id' , async (req , res)=>{
+router.put('/:id' ,isLoggedIn , async (req , res)=>{
     let {id} = req.params
     await Listings.findByIdAndUpdate(id , {...req.body.listing})
     res.redirect('/listing')
 })
 
 // DELETE route
-router.delete('/:id' , async (req , res)=>{
+router.delete('/:id' , isLoggedIn , async (req , res)=>{
     let {id} = req.params
     let DeletedListing = await Listings.findByIdAndDelete(id)
     req.flash("success" , "listing deleted!!!")
