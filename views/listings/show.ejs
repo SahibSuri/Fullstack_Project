@@ -331,6 +331,14 @@
         </div>
       </div>
 
+       <div class="col-lg-10">
+        <div class="glass-card p-4 p-md-5">
+          <div class="row align-items-start">
+            <div class="col-md-8">
+              <p class="section-label">About this Retreat</p>
+              <p class="listing-description">Owned by <%= listingID.owner.username %></p>
+            </div>
+
       <div class="col-lg-10">
         <div class="glass-card p-4 p-md-5">
           <div class="row align-items-start">
@@ -347,23 +355,25 @@
                 <div class="price-amount">₹<%= listingID.price.toLocaleString("en-IN") %></div>
                 <div class="price-per">per night</div>
               </div>
-
-              <div class="d-flex flex-column gap-3">
-                <a href="/listing/<%= listingID._id %>/edit" class="btn-edit-gold">
-                  <span><i class="fa-regular fa-pen-to-square me-2"></i>Edit Details</span>
-                </a>
-                <form action="/listing/<%= listingID._id %>?_method=DELETE" method="POST">
-                  <button class="btn-delete-danger w-100">
-                    <span><i class="fa-solid fa-trash-can me-2"></i>Delete Listing</span>
-                  </button>
-                </form>
-              </div>
+                  <% if(currUser && listingID.owner._id.equals(currUser._id)) { %>
+                        <div class="d-flex flex-column gap-3">
+                          <a href="/listing/<%= listingID._id %>/edit" class="btn-edit-gold">
+                            <span><i class="fa-regular fa-pen-to-square me-2"></i>Edit Details</span>
+                          </a>
+                          <form action="/listing/<%= listingID._id %>?_method=DELETE" method="POST">
+                            <button class="btn-delete-danger w-100">
+                              <span><i class="fa-solid fa-trash-can me-2"></i>Delete Listing</span>
+                            </button>
+                          </form>
+                        </div>
+                  <% } %>
             </div>
           </div>
 
           <div class="gold-divider-horizontal"></div>
           
-          <div class="row g-5">
+          <% if(currUser) {  %>
+            <div class="row g-5">
             <div class="col-md-5">
               <p class="section-label">Leave a Review</p>
               <form action="/listing/<%= listingID._id %>/reviews" method="POST" class="needs-validation" novalidate>
@@ -389,6 +399,7 @@
                 </button>
               </form>
             </div>
+          <% } %>
 
             <div class="col-md-7">
               <p class="section-label mb-4">Guest Reviews</p>
@@ -413,6 +424,8 @@
                           </div>
                           <p class="listing-description mb-0" style="font-size: 1rem; line-height: 1.6;">
                             "<%= review.comment %>"
+                            <hr>
+                            "Review By~ <%= review.createdBy.username %>"
                           </p>
                         </div>
                       </div>

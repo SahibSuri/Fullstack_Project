@@ -18,6 +18,7 @@ main()
 
 const initDB = async () =>{
     await listing.deleteMany({})
+    initData.data = initData.data.map((obj) => ({...obj , owner: "69f60629445e48f010b50599"}))
     await listing.insertMany(initData.data)   //.data isliye kyuki vaha pe data.js ki file me data object bana ke export kiya hai
     console.log("Data was INITIALIZED")
 }

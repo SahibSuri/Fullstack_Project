@@ -5,13 +5,16 @@ const {reviewSchema}= require("../schema")
 const Listings = require('../models/listing')
 const listing = require('../models/listing')
 const Reviews = require("../models/review")
+const {isLoggedIn , isReviewcreatedBy} = require('../middlewares')
 
 // -----------------------REVIEWS-----------------------------------
 // Add REVIEW route
-router.post('/' , async (req , res)=>{
+router.post('/' , isLoggedIn , async (req , res)=>{
     console.log(req.params.id)
     let listing = await Listings.findById(req.params.id)
     let newReview = new Reviews(req.body.review)
+    newReview.createdBy = req.user._id;
+    console.log(newReview)
     listing.reviews.push(newReview)
 
     await newReview.save()
@@ -21,7 +24,7 @@ router.post('/' , async (req , res)=>{
 })
 
 // Delete Review Route
-router.delete('/:reviewId' , (async(req , res)=>{
+router.delete('/:reviewId' , isLoggedIn , isReviewcreatedBy , (async(req , res)=>{
     let{id , reviewId} = req.params;
     await Listings.findByIdAndUpdate(id , {$pull: {review: reviewId}});
     await Reviews.findByIdAndDelete(reviewId);

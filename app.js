@@ -61,7 +61,7 @@ const sessionOptions={
 }
 
 app.get('/' , (req,res)=>{
-    res.render("/listings/home")
+    res.render('/listings/home')
 })
 
 // sessions and flash
@@ -103,5 +103,6 @@ app.use('/listing/:id/reviews' , reviewRouter);
 app.use('/' , userRouter)
 
 app.use((err , req , res , next)=>{
-    res.send("Something went wrong")
+    console.error(err);
+    res.status(500).send(err.message)
 })
